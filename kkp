@@ -1,0 +1,55 @@
+from flask import Flask ,jsonify ,request
+app = Flask ( __name__)
+
+@app.route("/")
+def welcome():
+    
+    return "this is my first web page   ampoit [/products]"
+#product databasa
+product_db = [
+    { 
+        "brand": "nike",
+        "price": 2000,
+        "color": "red",
+        "size": "s,m,l",
+        "qulaty": "high",
+        "material": "100%, cotonn"
+            
+    },
+    {                      
+        "brand": "puma",
+        "price": 1000,
+        "color" : "green",
+        "size": "s,m",
+        "qulite": "high",
+        "material": "90% ,cotton"
+    }
+ ]  
+# retrieve all products
+@app.route('/products')
+def get_products():
+    return jsonify (product_db )
+
+@app.route('/products/brand/<string:brand>')
+def get_product_by_brand(brand):
+    for product in product_db:
+        if product.get("Brand", "").lower() == brand.lower() or product.get("brand", "").lower() == brand.lower():
+            return jsonify(product)
+    return jsonify({"error": "Product not found"}), 404
+
+@app.route('/products', methods=['POST'])
+def add_product():
+    new_product = request.get_json()
+    return jsonify(new_product)
+# return jsonify( { "message": "Product 'adidas' deleted successfully"})
+
+
+
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
